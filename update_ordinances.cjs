@@ -1,0 +1,1021 @@
+const fs = require('fs');
+const content = fs.readFileSync('src/simulation/constants.ts', 'utf8');
+
+const newOrdinancesStr = `export const INITIAL_ORDINANCES: Ordinance[] = [
+  // --- FAMILY ---
+  {
+    id: 'ord_universal_child_allowance',
+    category: 'family',
+    name: {
+      en: 'Universal Monthly Child Allowance (¥50,000/mo)',
+      ja: '児童手当の大幅拡充（月5万円給付）',
+    },
+    description: {
+      en: 'Direct unconditional cash transfer to all families for each child until age 18. Strongly supported by young parents.',
+      ja: '高校卒業までの全ての子どもに月5万円を無所得制限で給付。若年層の強い支持を獲得。',
+    },
+    impactSummary: {
+      en: '+0.08 National TFR, +6 Youth Hope, Cost: ¥2,400B/yr.',
+      ja: '全国TFR +0.08、若者希望指数 +6、歳出 +2.4兆円/年。',
+    },
+    annualCostBillion: 2400,
+    tfrDelta: 0.08,
+    hopeIndexDelta: 6,
+    productivityDelta: 0,
+    seniorApprovalDelta: -4,
+    youthApprovalDelta: 16,
+    active: false,
+    unlockedYear: 2025,
+    replaces: ['ord_universal_child_allowance_100k'],
+  },
+  {
+    id: 'ord_universal_child_allowance_100k',
+    category: 'family',
+    name: {
+      en: 'Universal Monthly Child Allowance (¥100,000/mo)',
+      ja: '児童手当の超大型拡充（月10万円給付）',
+    },
+    description: {
+      en: 'Extreme cash transfer to all families for each child until age 18. Highly controversial due to devastating fiscal cost.',
+      ja: '高校卒業までの全ての子どもに月10万円を無所得制限で給付。出生率は上がるが、財政破綻の危機を招く。',
+    },
+    impactSummary: {
+      en: '+0.15 National TFR, +25 Youth Hope, ruinous cost (-¥8,400B/yr).',
+      ja: '全国TFR +0.15、若者希望指数 +25、超巨額歳出 +8兆4000億円/年。',
+    },
+    annualCostBillion: 8400,
+    tfrDelta: 0.15,
+    hopeIndexDelta: 25,
+    productivityDelta: -0.01,
+    seniorApprovalDelta: -10,
+    youthApprovalDelta: 25,
+    active: false,
+    unlockedYear: 2025,
+    replaces: ['ord_universal_child_allowance'],
+  },
+  {
+    id: 'ord_tax_free_children',
+    category: 'family',
+    name: {
+      en: 'Zero Income Tax for Mothers of 3+ Children',
+      ja: '第3子出産で所得税一生涯免除（ハンガリー方式）',
+    },
+    description: {
+      en: 'Completely exempts mothers of three or more children from national income tax for life. Highly effective but criticized for gender bias.',
+      ja: '第3子を出産した女性の所得税を一生涯免除する。多子世帯は激増するが、性差別との批判も強い。',
+    },
+    impactSummary: {
+      en: '+0.12 National TFR, -¥1,500B Tax Base, polarizes voters.',
+      ja: '全国TFR +0.12、税収減 -1兆5000億円/年、世論が二極化。',
+    },
+    annualCostBillion: 1500,
+    tfrDelta: 0.12,
+    hopeIndexDelta: 5,
+    productivityDelta: -0.02,
+    seniorApprovalDelta: -5,
+    youthApprovalDelta: 10,
+    active: false,
+    unlockedYear: 2025,
+  },
+  {
+    id: 'ord_means_tested_housing',
+    category: 'family',
+    name: {
+      en: 'Targeted Marriage & Housing Subsidies for Under-35s',
+      ja: '若年・新婚世帯向け住宅家賃補助＆優先入居',
+    },
+    description: {
+      en: 'Subsidizes down payments and rent for couples under 35 with children, slashing Tokyo & suburban barrier to entry.',
+      ja: '35歳以下の新婚・子育て世帯に家賃補助と公営住宅の優先割当を実施し、結婚の障壁を緩和。',
+    },
+    impactSummary: {
+      en: '+0.05 National TFR, +8 Youth Hope, Cost: ¥850B/yr.',
+      ja: '全国TFR +0.05、若者希望指数 +8、歳出 +8,500億円/年。',
+    },
+    annualCostBillion: 850,
+    tfrDelta: 0.05,
+    hopeIndexDelta: 8,
+    productivityDelta: 0.01,
+    seniorApprovalDelta: -1,
+    youthApprovalDelta: 12,
+    active: false,
+    unlockedYear: 2025,
+  },
+  {
+    id: 'ord_free_early_childcare_ivg',
+    category: 'family',
+    name: {
+      en: 'State-Funded Daycares & Pediatric Care',
+      ja: '認定こども園の完全無償化＆医療費免除',
+    },
+    description: {
+      en: 'Fully covers public and private daycare fees from age 0 to 5 and provides 100% free pediatric healthcare.',
+      ja: '0歳からの保育料を完全無償化し、24時間対応の病児保育・小児医療費を国費で全額負担。',
+    },
+    impactSummary: {
+      en: '+0.09 National TFR, +10 Youth Hope, Cost: ¥1,600B/yr.',
+      ja: '全国TFR +0.09、若者希望指数 +10、歳出 +1.6兆円/年。',
+    },
+    annualCostBillion: 1600,
+    tfrDelta: 0.09,
+    hopeIndexDelta: 10,
+    productivityDelta: 0.01,
+    seniorApprovalDelta: -2,
+    youthApprovalDelta: 15,
+    active: false,
+    unlockedYear: 2025,
+  },
+  {
+    id: 'ord_state_matchmaking_app',
+    category: 'family',
+    name: {
+      en: 'State-Run AI Matchmaking App',
+      ja: '国営AIマッチングアプリの無償提供',
+    },
+    description: {
+      en: 'A free, nationalized dating application using AI and MyNumber civic registries to verify identities and securely match citizens.',
+      ja: 'マイナンバーを活用して身元を完全保証する国営のマッチングアプリ。安心安全な出会いを提供。',
+    },
+    impactSummary: {
+      en: '+0.01 National TFR, +2 Youth Hope, Cost: ¥20B/yr.',
+      ja: '全国TFR +0.01、若者希望指数 +2、歳出 +200億円/年。',
+    },
+    annualCostBillion: 20,
+    tfrDelta: 0.01,
+    hopeIndexDelta: 2,
+    productivityDelta: 0,
+    seniorApprovalDelta: -1,
+    youthApprovalDelta: 5,
+    active: false,
+    unlockedYear: 2025,
+  },
+  {
+    id: 'ord_third_child_bonus_10m',
+    category: 'family',
+    name: {
+      en: '¥10 Million Third-Child Bonus',
+      ja: '第3子出産1000万円ボーナス',
+    },
+    description: {
+      en: 'A massive lump-sum payout of 10 million yen specifically awarded upon the birth of a family\'s third child.',
+      ja: '第3子誕生時に現金1000万円を一括支給。多子世帯の劇的な増加を狙う荒療治。',
+    },
+    impactSummary: {
+      en: '+0.06 National TFR, +3 Youth Hope, Cost: ¥1,000B/yr.',
+      ja: '全国TFR +0.06、若者希望指数 +3、歳出 +1兆円/年。',
+    },
+    annualCostBillion: 1000,
+    tfrDelta: 0.06,
+    hopeIndexDelta: 3,
+    productivityDelta: 0,
+    seniorApprovalDelta: -4,
+    youthApprovalDelta: 8,
+    active: false,
+    unlockedYear: 2025,
+  },
+  {
+    id: 'ord_video_game_curfew',
+    category: 'family',
+    name: {
+      en: 'National Video Game Curfew',
+      ja: '未成年ネット・ゲーム利用時間規制',
+    },
+    description: {
+      en: 'Mandates ISPs and gaming companies to enforce a 90-minute daily limit for minors to focus on studying and physical health.',
+      ja: '青少年のスマホ・ゲーム利用を1日90分に制限する。高齢層は支持するが、若者の激しい怒りを買う。',
+    },
+    impactSummary: {
+      en: '-0.01 TFR, -15 Youth Hope, +10 Senior Approval.',
+      ja: '全国TFR -0.01、若者希望指数 -15、高齢者支持 +10。',
+    },
+    annualCostBillion: 10,
+    tfrDelta: -0.01,
+    hopeIndexDelta: -15,
+    productivityDelta: 0.01,
+    seniorApprovalDelta: 10,
+    youthApprovalDelta: -25,
+    active: false,
+    unlockedYear: 2025,
+  },
+  {
+    id: 'ord_egg_freezing',
+    category: 'family',
+    name: {
+      en: 'Mandatory Egg Freezing Subsidies',
+      ja: '20代女性の卵子凍結全額補助',
+    },
+    description: {
+      en: 'Provides 100% subsidies for elective egg freezing for women in their 20s, allowing for delayed family planning without losing fertility.',
+      ja: '20代女性の卵子凍結費用を国が全額負担。キャリアと出産の両立を支援する。',
+    },
+    impactSummary: {
+      en: '+0.04 National TFR, +5 Youth Hope, Cost: ¥300B/yr.',
+      ja: '全国TFR +0.04、若者希望指数 +5、歳出 +3,000億円/年。',
+    },
+    annualCostBillion: 300,
+    tfrDelta: 0.04,
+    hopeIndexDelta: 5,
+    productivityDelta: 0.02,
+    seniorApprovalDelta: -2,
+    youthApprovalDelta: 12,
+    active: false,
+    unlockedYear: 2025,
+  },
+  {
+    id: 'ord_subsidized_domestic_helpers',
+    category: 'family',
+    name: {
+      en: 'Subsidized Domestic Helpers',
+      ja: '共働き世帯向け家事代行・ベビーシッター補助',
+    },
+    description: {
+      en: 'Provides heavily subsidized domestic helpers and babysitters to dual-income families, reducing the burden of the "second shift".',
+      ja: '共働き世帯の家事・育児負担を減らすため、家事代行やシッター費用を大幅に補助。',
+    },
+    impactSummary: {
+      en: '+0.03 National TFR, +4 Youth Hope, Cost: ¥450B/yr.',
+      ja: '全国TFR +0.03、若者希望指数 +4、歳出 +4,500億円/年。',
+    },
+    annualCostBillion: 450,
+    tfrDelta: 0.03,
+    hopeIndexDelta: 4,
+    productivityDelta: 0.05,
+    seniorApprovalDelta: -1,
+    youthApprovalDelta: 9,
+    active: false,
+    unlockedYear: 2025,
+  },
+  {
+    id: 'ord_joint_custody',
+    category: 'family',
+    name: {
+      en: 'Abolishment of Joint-Custody Ban',
+      ja: '共同親権の完全合法化・義務化',
+    },
+    description: {
+      en: 'Replaces sole custody default with mandatory joint custody post-divorce, aiming to keep both parents involved in child-rearing.',
+      ja: '離婚後の単独親権制度を廃止し、原則として共同親権を義務化。両親が育児に関わる環境を整備。',
+    },
+    impactSummary: {
+      en: '+0.01 National TFR, +1 Youth Hope, Divides public opinion.',
+      ja: '全国TFR +0.01、若者希望指数 +1、賛否が大きく分かれる。',
+    },
+    annualCostBillion: 5,
+    tfrDelta: 0.01,
+    hopeIndexDelta: 1,
+    productivityDelta: 0,
+    seniorApprovalDelta: 0,
+    youthApprovalDelta: 2,
+    active: false,
+    unlockedYear: 2025,
+  },
+
+  // --- LABOR ---
+  {
+    id: 'ord_mandatory_paternity_leave',
+    category: 'labor',
+    name: {
+      en: 'Mandatory 6-Month Paternity Leave',
+      ja: '男性育休（半年）の完全義務化',
+    },
+    description: {
+      en: 'Forces all companies to grant and enforce 6 months of fully paid paternity leave for fathers. Heavy corporate fines for non-compliance.',
+      ja: 'すべての企業に男性の半年間の育児休業取得を義務付け、違反企業には巨額の罰金を科す。',
+    },
+    impactSummary: {
+      en: '+0.07 National TFR, +15 Youth Hope, -5% Corp Productivity.',
+      ja: '全国TFR +0.07、若者希望指数 +15、企業生産性 -5%。',
+    },
+    annualCostBillion: 600,
+    tfrDelta: 0.07,
+    hopeIndexDelta: 15,
+    productivityDelta: -0.05,
+    seniorApprovalDelta: -3,
+    youthApprovalDelta: 18,
+    active: false,
+    unlockedYear: 2025,
+  },
+  {
+    id: 'ord_equal_pay_regularization',
+    category: 'labor',
+    name: {
+      en: 'Equal Pay & End to Non-Regular Employment',
+      ja: '同一労働同一賃金＆非正規雇用の原則禁止',
+    },
+    description: {
+      en: 'Abolishes the two-tier employment system. Mandates equal pay, benefits, and job security for all workers regardless of contract type.',
+      ja: '正規・非正規の格差を完全に撤廃し、全労働者に同等の給与と福利厚生を保障。若者の経済的安定をもたらす。',
+    },
+    impactSummary: {
+      en: '+0.05 National TFR, +20 Youth Hope, -8% Corp Productivity.',
+      ja: '全国TFR +0.05、若者希望指数 +20、企業生産性 -8%。',
+    },
+    annualCostBillion: 400,
+    tfrDelta: 0.05,
+    hopeIndexDelta: 20,
+    productivityDelta: -0.08,
+    seniorApprovalDelta: -2,
+    youthApprovalDelta: 25,
+    active: false,
+    unlockedYear: 2025,
+  },
+  {
+    id: 'ord_four_day_workweek_remote',
+    category: 'labor',
+    name: {
+      en: 'Mandatory 4-Day Workweek & Remote Right',
+      ja: '週休3日制＆テレワークの権利化',
+    },
+    description: {
+      en: 'Cuts standard weekly hours to 32 with no pay reduction. Grants legal right to remote work, boosting leisure and family time.',
+      ja: '給与水準を維持したまま週休3日制を導入。テレワークを法的権利とし、家族と過ごす時間を大幅に増やす。',
+    },
+    impactSummary: {
+      en: '+0.04 National TFR, +18 Youth Hope, -10% Corp Productivity.',
+      ja: '全国TFR +0.04、若者希望指数 +18、企業生産性 -10%。',
+    },
+    annualCostBillion: 300,
+    tfrDelta: 0.04,
+    hopeIndexDelta: 18,
+    productivityDelta: -0.10,
+    seniorApprovalDelta: -5,
+    youthApprovalDelta: 22,
+    active: false,
+    unlockedYear: 2025,
+  },
+  {
+    id: 'ord_unlimited_paid_leave',
+    category: 'labor',
+    name: {
+      en: 'Unlimited Paid Leave Mandate',
+      ja: '無制限有給休暇の義務化',
+    },
+    description: {
+      en: 'Forces all businesses to offer theoretically unlimited paid time off to prevent burnout and karoshi.',
+      ja: '過労死を防ぐため、企業に「無制限の有給休暇」の提供を義務付ける。生産性への打撃は大きい。',
+    },
+    impactSummary: {
+      en: '+0.02 National TFR, +12 Youth Hope, -15% Corp Productivity.',
+      ja: '全国TFR +0.02、若者希望指数 +12、企業生産性 -15%。',
+    },
+    annualCostBillion: 100,
+    tfrDelta: 0.02,
+    hopeIndexDelta: 12,
+    productivityDelta: -0.15,
+    seniorApprovalDelta: -8,
+    youthApprovalDelta: 15,
+    active: false,
+    unlockedYear: 2025,
+  },
+  {
+    id: 'ord_senior_labor_mandate',
+    category: 'labor',
+    name: {
+      en: 'Mandatory Senior Labor Integration (Retirement at 75)',
+      ja: '定年75歳への引き上げ＆シニア就労義務化',
+    },
+    description: {
+      en: 'Pushes the national retirement age to 75. Forces companies to retain aging workers to prop up the labor force, angering youth waiting for promotions.',
+      ja: '定年を75歳に引き上げ、労働力不足を補う。生産性は維持されるが、ポストが空かず若者が激怒する。',
+    },
+    impactSummary: {
+      en: '-0.02 National TFR, -15 Youth Hope, +12% Productivity.',
+      ja: '全国TFR -0.02、若者希望指数 -15、生産性 +12%。',
+    },
+    annualCostBillion: -500, // Saves pension costs
+    tfrDelta: -0.02,
+    hopeIndexDelta: -15,
+    productivityDelta: 0.12,
+    seniorApprovalDelta: 8,
+    youthApprovalDelta: -20,
+    active: false,
+    unlockedYear: 2025,
+  },
+  {
+    id: 'ord_right_to_disconnect',
+    category: 'labor',
+    name: {
+      en: 'Right to Disconnect Law',
+      ja: 'つながらない権利（勤務時間外の連絡禁止）',
+    },
+    description: {
+      en: 'Makes it illegal for employers to contact employees outside of working hours, enforcing strict boundaries between work and personal life.',
+      ja: '勤務時間外の業務メールや電話を法律で禁止し、ワークライフバランスを強制的に守る。',
+    },
+    impactSummary: {
+      en: '+0.01 National TFR, +8 Youth Hope, -2% Productivity.',
+      ja: '全国TFR +0.01、若者希望指数 +8、生産性 -2%。',
+    },
+    annualCostBillion: 50,
+    tfrDelta: 0.01,
+    hopeIndexDelta: 8,
+    productivityDelta: -0.02,
+    seniorApprovalDelta: -1,
+    youthApprovalDelta: 12,
+    active: false,
+    unlockedYear: 2025,
+  },
+  {
+    id: 'ord_female_board_quota',
+    category: 'labor',
+    name: {
+      en: '40% Female Board Member Quota',
+      ja: '女性役員比率40%の義務化',
+    },
+    description: {
+      en: 'Mandates that publicly traded companies must have at least 40% female representation on their boards, breaking the glass ceiling.',
+      ja: '上場企業の役員の40%以上を女性にすることを義務付け、ガラスの天井を破壊する。',
+    },
+    impactSummary: {
+      en: '+0.02 National TFR, +5 Youth Hope, Drives social modernization.',
+      ja: '全国TFR +0.02、若者希望指数 +5、社会の近代化を促進。',
+    },
+    annualCostBillion: 20,
+    tfrDelta: 0.02,
+    hopeIndexDelta: 5,
+    productivityDelta: 0.01,
+    seniorApprovalDelta: -3,
+    youthApprovalDelta: 8,
+    active: false,
+    unlockedYear: 2025,
+  },
+  {
+    id: 'ord_menstrual_leave',
+    category: 'labor',
+    name: {
+      en: 'Fully Paid Menstrual & Menopause Leave',
+      ja: '生理休暇・更年期休暇の完全有給化',
+    },
+    description: {
+      en: 'Guarantees fully paid and unquestioned time off for menstrual pain and menopause symptoms, deeply supporting female health in the workforce.',
+      ja: '生理や更年期障害による休暇を完全有給化し、女性が健康的に働き続けられる環境を整備。',
+    },
+    impactSummary: {
+      en: '+0.03 National TFR, +10 Youth Hope, -3% Productivity.',
+      ja: '全国TFR +0.03、若者希望指数 +10、生産性 -3%。',
+    },
+    annualCostBillion: 120,
+    tfrDelta: 0.03,
+    hopeIndexDelta: 10,
+    productivityDelta: -0.03,
+    seniorApprovalDelta: -2,
+    youthApprovalDelta: 15,
+    active: false,
+    unlockedYear: 2025,
+  },
+
+  // --- IMMIGRATION ---
+  {
+    id: 'ord_high_skill_visa',
+    category: 'immigration',
+    name: {
+      en: 'High-Skill Tech & Medical Visa Fast-Track',
+      ja: '高度専門職（IT・医療）ビザの迅速発給',
+    },
+    description: {
+      en: 'Streamlines immigration for foreign engineers, doctors, and scientists. Brings in essential talent without sparking nationalist backlash.',
+      ja: 'ITエンジニアや医療従事者などの高度人材のビザ発給を簡素化。反発を抑えつつ労働力を確保。',
+    },
+    impactSummary: {
+      en: '+3% Productivity, +100k Population, +2% Tax Revenue.',
+      ja: '生産性 +3%、人口 +10万人、税収 +2%。',
+    },
+    annualCostBillion: -100, // Generates tax revenue
+    tfrDelta: 0.01,
+    hopeIndexDelta: 2,
+    productivityDelta: 0.03,
+    seniorApprovalDelta: -2,
+    youthApprovalDelta: 5,
+    active: false,
+    unlockedYear: 2025,
+  },
+  {
+    id: 'ord_permanent_residency_family',
+    category: 'immigration',
+    name: {
+      en: 'Permanent Residency for Foreign Workers',
+      ja: '外国人労働者の家族帯同・永住権付与',
+    },
+    description: {
+      en: 'Allows blue-collar foreign workers to bring their families and apply for permanent residency, rapidly growing population but upsetting conservatives.',
+      ja: '外国人労働者の家族帯同と永住を許可。人口減少に歯止めをかけるが、保守層からの反発が非常に強い。',
+    },
+    impactSummary: {
+      en: '+500k Population, +5% Productivity, -12 Senior Approval.',
+      ja: '人口 +50万人、生産性 +5%、高齢者支持 -12。',
+    },
+    annualCostBillion: 500, // Infrastructure cost
+    tfrDelta: 0.04,
+    hopeIndexDelta: 5,
+    productivityDelta: 0.05,
+    seniorApprovalDelta: -12,
+    youthApprovalDelta: 6,
+    active: false,
+    unlockedYear: 2025,
+  },
+  {
+    id: 'ord_global_student_citizenship',
+    category: 'immigration',
+    name: {
+      en: 'Global Student Citizenship Pathway',
+      ja: '外国人留学生の国籍取得ファストトラック',
+    },
+    description: {
+      en: 'Offers instant citizenship to foreign students who graduate from Japanese universities, capturing young, educated demographic capital.',
+      ja: '日本の大学を卒業した外国人留学生に即座に日本国籍を付与。若く優秀な人材を国内に定着させる。',
+    },
+    impactSummary: {
+      en: '+150k Youth Population, +2 Youth Hope, +4% Productivity.',
+      ja: '若者人口 +15万人、若者希望指数 +2、生産性 +4%。',
+    },
+    annualCostBillion: 150,
+    tfrDelta: 0.02,
+    hopeIndexDelta: 2,
+    productivityDelta: 0.04,
+    seniorApprovalDelta: -8,
+    youthApprovalDelta: 8,
+    active: false,
+    unlockedYear: 2025,
+  },
+  {
+    id: 'ord_digital_nomad_visa',
+    category: 'immigration',
+    name: {
+      en: 'Digital Nomad Luxury Visa',
+      ja: 'デジタルノマド向け富裕層ビザ',
+    },
+    description: {
+      en: 'Invites wealthy remote workers globally to live in Japan tax-free for 2 years, bringing foreign capital but causing local gentrification.',
+      ja: '世界の富裕層リモートワーカーを免税で受け入れ。外貨を獲得するが、一部地域でジェントリフィケーションが発生。',
+    },
+    impactSummary: {
+      en: '+1% Productivity, +¥200B Revenue, -3 Youth Hope.',
+      ja: '生産性 +1%、税収 +2000億円、若者希望指数 -3。',
+    },
+    annualCostBillion: -200,
+    tfrDelta: 0.0,
+    hopeIndexDelta: -3,
+    productivityDelta: 0.01,
+    seniorApprovalDelta: -2,
+    youthApprovalDelta: -3,
+    active: false,
+    unlockedYear: 2025,
+  },
+  {
+    id: 'ord_blue_collar_unrestricted',
+    category: 'immigration',
+    name: {
+      en: 'Unrestricted Blue-Collar Labor Visas',
+      ja: '単純労働者のビザ制限撤廃',
+    },
+    description: {
+      en: 'Opens the floodgates for unrestricted foreign labor in construction, caregiving, and retail. Solves labor shortages but deeply alienates conservatives.',
+      ja: '建設、介護、小売における外国人労働者の受け入れ制限を完全に撤廃。人手不足は解消するが保守層は激怒。',
+    },
+    impactSummary: {
+      en: '+1M Population, +10% Productivity, -20 Senior Approval.',
+      ja: '人口 +100万人、生産性 +10%、高齢者支持 -20。',
+    },
+    annualCostBillion: 800,
+    tfrDelta: 0.05,
+    hopeIndexDelta: 4,
+    productivityDelta: 0.10,
+    seniorApprovalDelta: -20,
+    youthApprovalDelta: 2,
+    active: false,
+    unlockedYear: 2025,
+  },
+  {
+    id: 'ord_golden_visa',
+    category: 'immigration',
+    name: {
+      en: 'Foreign Investor Golden Visa',
+      ja: '海外投資家向けゴールデンビザ',
+    },
+    description: {
+      en: 'Grants instant permanent residency to foreigners who invest more than ¥100 million in Japanese real estate or businesses.',
+      ja: '日本の不動産や企業に1億円以上投資した外国人に無条件で永住権を付与。巨額の資金が流入する。',
+    },
+    impactSummary: {
+      en: '+¥1,000B Revenue, Widens inequality, -5 Hope.',
+      ja: '税収 +1兆円、格差拡大、若者希望指数 -5。',
+    },
+    annualCostBillion: -1000,
+    tfrDelta: 0,
+    hopeIndexDelta: -5,
+    productivityDelta: 0.02,
+    seniorApprovalDelta: -4,
+    youthApprovalDelta: -5,
+    active: false,
+    unlockedYear: 2025,
+  },
+  {
+    id: 'ord_jus_soli',
+    category: 'immigration',
+    name: {
+      en: 'Birthright Citizenship (Jus Soli)',
+      ja: '出生地主義（ジュス・ソリ）の導入',
+    },
+    description: {
+      en: 'Radical constitutional shift granting automatic Japanese citizenship to any child born on Japanese soil, completely changing national identity.',
+      ja: '日本国内で生まれた全ての子どもに自動的に日本国籍を付与する。国のアイデンティティを根底から変える歴史的転換。',
+    },
+    impactSummary: {
+      en: '+0.10 TFR (Immigrant demographics), -30 Senior Approval.',
+      ja: '出生率 +0.10（移民効果）、高齢者支持 -30。',
+    },
+    annualCostBillion: 1200,
+    tfrDelta: 0.10,
+    hopeIndexDelta: 10,
+    productivityDelta: 0.06,
+    seniorApprovalDelta: -30,
+    youthApprovalDelta: 5,
+    active: false,
+    unlockedYear: 2025,
+  },
+
+  // --- AUTOMATION ---
+  {
+    id: 'ord_eldercare_robotics_mandate',
+    category: 'automation',
+    name: {
+      en: 'Subsidized Eldercare Robotics Mandate',
+      ja: '介護ロボット・パワードスーツ導入義務化',
+    },
+    description: {
+      en: 'Heavily subsidizes the integration of robotic exoskeletons and automated care beds in nursing homes to mitigate severe caregiver shortages.',
+      ja: '深刻な介護士不足を補うため、介護施設へのロボット・パワードスーツの導入を国費で強力に支援・義務化。',
+    },
+    impactSummary: {
+      en: '+4% Productivity, +10 Senior Approval, Cost: ¥1,200B/yr.',
+      ja: '生産性 +4%、高齢者支持 +10、歳出 +1.2兆円/年。',
+    },
+    annualCostBillion: 1200,
+    tfrDelta: 0.0,
+    hopeIndexDelta: 2,
+    productivityDelta: 0.04,
+    seniorApprovalDelta: 10,
+    youthApprovalDelta: 2,
+    active: false,
+    unlockedYear: 2025,
+  },
+  {
+    id: 'ord_national_ai_transformation',
+    category: 'automation',
+    name: {
+      en: 'National AI Bureaucracy Transformation',
+      ja: '国家公務員AI代替・行政DX',
+    },
+    description: {
+      en: 'Replaces 40% of standard civil servants with LLMs and automated workflows, drastically cutting government operating costs.',
+      ja: '国家公務員・地方公務員の40%をAIと自動化システムで代替。行政コストを劇的に削減する。',
+    },
+    impactSummary: {
+      en: '+8% Productivity, -¥2,500B Gov Expenses, Anger from unions.',
+      ja: '生産性 +8%、歳出削減 -2.5兆円、労働組合の怒り。',
+    },
+    annualCostBillion: -2500,
+    tfrDelta: 0.0,
+    hopeIndexDelta: 5,
+    productivityDelta: 0.08,
+    seniorApprovalDelta: -5,
+    youthApprovalDelta: 10,
+    active: false,
+    unlockedYear: 2025,
+  },
+  {
+    id: 'ord_smart_agri_logistics_grid',
+    category: 'automation',
+    name: {
+      en: 'Smart Agriculture & Automated Logistics Grid',
+      ja: 'スマート農業＆自動物流グリッド構想',
+    },
+    description: {
+      en: 'Builds autonomous drone highways and automated farming centers to secure the food supply as the rural population vanishes.',
+      ja: '過疎化する地方の食料生産と物流を維持するため、自動運転トラックとドローン網を国策で整備する。',
+    },
+    impactSummary: {
+      en: '+6% Productivity, Revitalizes regional hubs, Cost: ¥1,800B/yr.',
+      ja: '生産性 +6%、地方の維持、歳出 +1.8兆円/年。',
+    },
+    annualCostBillion: 1800,
+    tfrDelta: 0.01,
+    hopeIndexDelta: 3,
+    productivityDelta: 0.06,
+    seniorApprovalDelta: 5,
+    youthApprovalDelta: 4,
+    active: false,
+    unlockedYear: 2025,
+  },
+  {
+    id: 'ord_ai_ceo_subsidy',
+    category: 'automation',
+    name: {
+      en: 'AI Middle-Management Substitution Subsidy',
+      ja: 'AI管理職・ミドルマネジメント代替特区',
+    },
+    description: {
+      en: 'Subsidizes corporations that replace middle-management layers with AI dispatchers, flattening corporate hierarchy and boosting efficiency.',
+      ja: '中間管理職をAIに置き換える企業を優遇。日本の硬直化した企業階層を破壊し、意思決定を高速化する。',
+    },
+    impactSummary: {
+      en: '+12% Productivity, -10 Senior Approval, +8 Youth Hope.',
+      ja: '生産性 +12%、高齢者支持 -10、若者希望指数 +8。',
+    },
+    annualCostBillion: 400,
+    tfrDelta: 0.0,
+    hopeIndexDelta: 8,
+    productivityDelta: 0.12,
+    seniorApprovalDelta: -10,
+    youthApprovalDelta: 10,
+    active: false,
+    unlockedYear: 2025,
+  },
+  {
+    id: 'ord_autonomous_transit',
+    category: 'automation',
+    name: {
+      en: 'Autonomous Fleet Public Transit Mandate',
+      ja: '完全自動運転バス・タクシーの全国解禁',
+    },
+    description: {
+      en: 'Overrides taxi unions to deploy level-5 autonomous fleets nationwide, ensuring mobility for the elderly and cheap transit for youth.',
+      ja: 'タクシー業界の反発を押し切り、完全自動運転車両を全国に配備。交通弱者を救済し、移動コストを下げる。',
+    },
+    impactSummary: {
+      en: '+5% Productivity, +5 Senior Approval, +5 Youth Hope.',
+      ja: '生産性 +5%、高齢者支持 +5、若者希望指数 +5。',
+    },
+    annualCostBillion: 600,
+    tfrDelta: 0.01,
+    hopeIndexDelta: 5,
+    productivityDelta: 0.05,
+    seniorApprovalDelta: 5,
+    youthApprovalDelta: 5,
+    active: false,
+    unlockedYear: 2025,
+  },
+  {
+    id: 'ord_ai_education_tutors',
+    category: 'automation',
+    name: {
+      en: 'Universal AI Education Tutors',
+      ja: '公教育のAI個別最適化（教員半減）',
+    },
+    description: {
+      en: 'Replaces human teachers with highly personalized AI tutors for every student, drastically improving outcomes but firing educators.',
+      ja: '児童一人ひとりに最適化されたAIチューターを支給し、人間の教員を半減。教育格差は消えるが組合は反発。',
+    },
+    impactSummary: {
+      en: '+0.02 TFR (Cheaper education), +8 Youth Hope, -¥1,000B Budget.',
+      ja: '出生率 +0.02（教育費減）、若者希望指数 +8、歳出削減 -1兆円。',
+    },
+    annualCostBillion: -1000,
+    tfrDelta: 0.02,
+    hopeIndexDelta: 8,
+    productivityDelta: 0.07,
+    seniorApprovalDelta: -5,
+    youthApprovalDelta: 10,
+    active: false,
+    unlockedYear: 2025,
+  },
+  {
+    id: 'ord_robot_tax',
+    category: 'automation',
+    name: {
+      en: 'Robot & Automation Tax',
+      ja: 'ロボット・AI導入税',
+    },
+    description: {
+      en: 'Levies a high tax on companies that replace human workers with AI, using the funds to support displaced workers. Stifles innovation.',
+      ja: '人間の労働者をAIやロボットで代替した企業に重税を課し、失業者を救済する。イノベーションは停滞する。',
+    },
+    impactSummary: {
+      en: '-15% Productivity, +¥2,000B Revenue, +5 Senior Approval.',
+      ja: '生産性 -15%、税収 +2兆円、高齢者支持 +5。',
+    },
+    annualCostBillion: -2000,
+    tfrDelta: -0.01,
+    hopeIndexDelta: -2,
+    productivityDelta: -0.15,
+    seniorApprovalDelta: 5,
+    youthApprovalDelta: 2,
+    active: false,
+    unlockedYear: 2025,
+  },
+
+  // --- FISCAL ---
+  {
+    id: 'ord_senior_copay_increase',
+    category: 'fiscal',
+    name: {
+      en: 'Senior Healthcare Co-Pay Increase (to 30%)',
+      ja: '後期高齢者医療費の窓口負担3割化',
+    },
+    description: {
+      en: 'Forces the elderly to pay 30% out-of-pocket for medical expenses, matching the working generation. Saves trillions but costs seniors their lives & votes.',
+      ja: '75歳以上の医療費窓口負担を現役世代と同じ3割に引き上げ。社会保障費を劇的に削減するが、高齢者の猛反発を招く。',
+    },
+    impactSummary: {
+      en: 'Saves ¥4,500B/yr, +15 Youth Hope, -35 Senior Approval (Devastating).',
+      ja: '歳出削減 -4.5兆円/年、若者希望指数 +15、高齢者支持 -35(致命的)。',
+    },
+    annualCostBillion: -4500, // Negative cost = savings
+    tfrDelta: 0.02,
+    hopeIndexDelta: 15,
+    productivityDelta: 0,
+    seniorApprovalDelta: -35,
+    youthApprovalDelta: 20,
+    active: false,
+    unlockedYear: 2025,
+  },
+  {
+    id: 'ord_consumption_tax_hike',
+    category: 'fiscal',
+    name: {
+      en: 'Consumption Tax Hike to 15%',
+      ja: '消費税15%への大増税',
+    },
+    description: {
+      en: 'Raises the national consumption tax to 15% to secure social security funding. Stabilizes the debt but suppresses consumer spending.',
+      ja: '消費税を15%に引き上げ、膨張する社会保障費の財源を確保。国の借金は減るが、景気と出生率は冷え込む。',
+    },
+    impactSummary: {
+      en: 'Generates ¥11,000B/yr, -0.05 TFR, -15 Youth Hope.',
+      ja: '税収増 +11兆円/年、TFR -0.05、若者希望指数 -15。',
+    },
+    annualCostBillion: -11000,
+    tfrDelta: -0.05,
+    hopeIndexDelta: -15,
+    productivityDelta: -0.02,
+    seniorApprovalDelta: -8,
+    youthApprovalDelta: -18,
+    active: false,
+    unlockedYear: 2025,
+    replaces: ['ord_consumption_tax_cut'],
+  },
+  {
+    id: 'ord_consumption_tax_cut',
+    category: 'fiscal',
+    name: {
+      en: 'Populist Consumption Tax Cut to 5%',
+      ja: '消費税5%への大減税',
+    },
+    description: {
+      en: 'Slashes consumption tax back to 5%. Highly popular and boosts short-term spending, but blows a massive hole in the national budget.',
+      ja: '消費税を5%に減税。景気は一気に回復し支持率も爆発的に上がるが、国家財政は破綻に一直線に向かう。',
+    },
+    impactSummary: {
+      en: 'Costs ¥11,000B/yr, +0.06 TFR, +20 Youth Hope, +15 Senior App.',
+      ja: '歳出(税収減) +11兆円/年、TFR +0.06、若者希望指数 +20、全世代支持。',
+    },
+    annualCostBillion: 11000,
+    tfrDelta: 0.06,
+    hopeIndexDelta: 20,
+    productivityDelta: 0.03,
+    seniorApprovalDelta: 15,
+    youthApprovalDelta: 25,
+    active: false,
+    unlockedYear: 2025,
+    replaces: ['ord_consumption_tax_hike'],
+  },
+  {
+    id: 'ord_wealth_corporate_surtax',
+    category: 'fiscal',
+    name: {
+      en: 'Wealth & Corporate Dividend Surtax',
+      ja: '富裕層・内部留保へのメガ課税',
+    },
+    description: {
+      en: 'Imposes heavy taxation on corporate retained earnings and individual stock dividends to redistribute wealth to the working class.',
+      ja: '大企業の内部留保と富裕層の金融所得に重税を課し、若年層への分配財源とする。企業は海外へ逃避する恐れ。',
+    },
+    impactSummary: {
+      en: 'Generates ¥6,000B/yr, +10 Youth Hope, -12% Productivity.',
+      ja: '税収増 +6兆円/年、若者希望指数 +10、企業生産性 -12%。',
+    },
+    annualCostBillion: -6000,
+    tfrDelta: 0.02,
+    hopeIndexDelta: 10,
+    productivityDelta: -0.12,
+    seniorApprovalDelta: 2,
+    youthApprovalDelta: 15,
+    active: false,
+    unlockedYear: 2025,
+  },
+  {
+    id: 'ord_inheritance_tax_hike',
+    category: 'fiscal',
+    name: {
+      en: 'Inheritance Tax Hike to 80%',
+      ja: '相続税80%・資産の強制再分配',
+    },
+    description: {
+      en: 'Effectively seizes generational wealth from passing to heirs, using the assets to pay off national debt. Seniors panic.',
+      ja: '相続税の最高税率を80%に引き上げ、世代間の富の偏在を強制的にリセットする。高齢資産家はパニックに陥る。',
+    },
+    impactSummary: {
+      en: 'Generates ¥8,000B/yr, +15 Youth Hope, -25 Senior Approval.',
+      ja: '税収増 +8兆円/年、若者希望指数 +15、高齢者支持 -25。',
+    },
+    annualCostBillion: -8000,
+    tfrDelta: 0.03,
+    hopeIndexDelta: 15,
+    productivityDelta: -0.05,
+    seniorApprovalDelta: -25,
+    youthApprovalDelta: 18,
+    active: false,
+    unlockedYear: 2025,
+  },
+  {
+    id: 'ord_ubi',
+    category: 'fiscal',
+    name: {
+      en: 'Universal Basic Income (¥80,000/mo)',
+      ja: 'ベーシックインカム（月8万円）',
+    },
+    description: {
+      en: 'Replaces all welfare and pensions with a flat monthly payment of ¥80,000 to every citizen. Extremely expensive but eradicates poverty.',
+      ja: '年金・生活保護を全廃し、全国民に月8万円を一律支給する。極度の財政負担を伴うが、絶対的貧困は消滅する。',
+    },
+    impactSummary: {
+      en: 'Costs ¥25,000B/yr, +0.10 TFR, +30 Youth Hope, +5 Productivity.',
+      ja: '歳出 +25兆円/年、出生率 +0.10、若者希望指数 +30。',
+    },
+    annualCostBillion: 25000,
+    tfrDelta: 0.10,
+    hopeIndexDelta: 30,
+    productivityDelta: 0.05,
+    seniorApprovalDelta: -10, // Seniors lose bigger pensions
+    youthApprovalDelta: 35,
+    active: false,
+    unlockedYear: 2025,
+  },
+  {
+    id: 'ord_privatize_pension',
+    category: 'fiscal',
+    name: {
+      en: 'Privatization of National Pension',
+      ja: '国民年金制度の完全民営化・廃止',
+    },
+    description: {
+      en: 'Abolishes the mandatory state pension system. Citizens must save for their own retirement. Solves the fiscal crisis but terrifies the public.',
+      ja: '賦課方式の公的年金を廃止し、完全自己責任の民間積立に移行する。国家の借金問題は解決するが、国民は老後に恐怖する。',
+    },
+    impactSummary: {
+      en: 'Saves ¥18,000B/yr, -20 Youth Hope, -40 Senior Approval.',
+      ja: '歳出削減 -18兆円/年、若者希望指数 -20、高齢者支持 -40(破滅的)。',
+    },
+    annualCostBillion: -18000,
+    tfrDelta: -0.05,
+    hopeIndexDelta: -20,
+    productivityDelta: 0.08,
+    seniorApprovalDelta: -40,
+    youthApprovalDelta: 5, // Some youth happy not to pay in
+    active: false,
+    unlockedYear: 2025,
+  },
+  {
+    id: 'ord_legalize_casinos',
+    category: 'fiscal',
+    name: {
+      en: 'Legalize Casinos & Recreational Drugs',
+      ja: 'カジノ・大麻の完全合法化と課税',
+    },
+    description: {
+      en: 'Legalizes and heavily taxes integrated resorts and recreational substances. Generates massive revenue but degrades public morals and safety.',
+      ja: 'IRカジノと一部の薬物を合法化して巨額の税収を得る。治安悪化の懸念から保守層の猛烈な反対に遭う。',
+    },
+    impactSummary: {
+      en: 'Generates ¥4,000B/yr, -5 TFR, -15 Senior Approval.',
+      ja: '税収増 +4兆円/年、出生率 -0.02、高齢者支持 -15。',
+    },
+    annualCostBillion: -4000,
+    tfrDelta: -0.02,
+    hopeIndexDelta: 2,
+    productivityDelta: -0.04,
+    seniorApprovalDelta: -15,
+    youthApprovalDelta: 10,
+    active: false,
+    unlockedYear: 2025,
+  },
+];
+`;
+
+const startIndex = content.indexOf('export const INITIAL_ORDINANCES: Ordinance[] = [');
+const endString = 'export const generateAnnualAgenda';
+const endIndex = content.indexOf(endString);
+
+if (startIndex === -1 || endIndex === -1) {
+    console.error("Could not find blocks to replace.");
+    process.exit(1);
+}
+
+// Keep the code before and after, replace the array
+const before = content.substring(0, startIndex);
+const after = content.substring(endIndex);
+
+const updatedContent = before + newOrdinancesStr + '\n' + after;
+
+fs.writeFileSync('src/simulation/constants.ts', updatedContent, 'utf8');
+console.log("Updated constants.ts");

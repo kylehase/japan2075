@@ -1,0 +1,6 @@
+{
+  "name": "Japan 2075: The Demographic Crisis",
+  "description": "A 2.5D isometric city & nation management game simulating Japan's demographic contraction, fiscal solvency, regional revitalization, and family policy from 2025 to 2075.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

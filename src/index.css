@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+@layer utilities {
+  .font-mono-tech {
+    font-family: 'Share Tech Mono', 'Courier New', monospace;
+  }
+  .font-digital {
+    font-family: 'Chakra Petch', 'DotGothic16', sans-serif;
+  }
+  
+  /* Modern Sleek Panels */
+  .retro-panel {
+    background: rgba(15, 23, 42, 0.94);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(51, 65, 85, 0.8);
+    border-radius: 0.75rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+  }
+  
+  .retro-panel-dark {
+    background: rgba(10, 15, 30, 0.96);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(30, 41, 59, 0.9);
+    border-radius: 0.75rem;
+    box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.7);
+  }
+
+  .retro-inset {
+    background: rgba(2, 6, 23, 0.75);
+    border: 1px solid rgba(30, 41, 59, 0.8);
+    border-radius: 0.5rem;
+  }
+
+  .retro-button {
+    background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+    border: 1px solid rgba(71, 85, 105, 0.7);
+    border-radius: 0.5rem;
+    color: #e2e8f0;
+    font-weight: 600;
+    transition: all 0.15s ease-in-out;
+  }
+  .retro-button:hover {
+    background: linear-gradient(180deg, #334155 0%, #1e293b 100%);
+    border-color: rgba(148, 163, 184, 0.8);
+    color: #ffffff;
+    box-shadow: 0 0 12px rgba(99, 102, 241, 0.2);
+  }
+  .retro-button:active, .retro-button.active {
+    background: linear-gradient(180deg, #3730a3 0%, #1e1b4b 100%);
+    border-color: rgba(129, 140, 248, 0.9);
+    color: #ffffff;
+    box-shadow: 0 0 16px rgba(99, 102, 241, 0.4);
+    transform: translateY(1px);
+  }
+
+  /* Modern Digital Glow Readouts */
+  .led-display-green {
+    background: rgba(4, 26, 14, 0.85);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    box-shadow: inset 0 0 10px rgba(16, 185, 129, 0.15);
+    font-family: 'Share Tech Mono', monospace;
+  }
+  
+  .led-display-amber {
+    background: rgba(28, 19, 3, 0.85);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    box-shadow: inset 0 0 10px rgba(245, 158, 11, 0.15);
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  .led-display-red {
+    background: rgba(28, 5, 5, 0.85);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.45);
+    box-shadow: inset 0 0 12px rgba(239, 68, 68, 0.2);
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  .led-display-cyan {
+    background: rgba(4, 23, 36, 0.85);
+    color: #22d3ee;
+    border: 1px solid rgba(6, 182, 212, 0.35);
+    box-shadow: inset 0 0 10px rgba(6, 182, 212, 0.15);
+    font-family: 'Share Tech Mono', monospace;
+  }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+.animate-marquee-smooth {
+  display: inline-block;
+  white-space: nowrap;
+  animation: marquee 35s linear infinite;
+}
+.animate-marquee-smooth:hover {
+  animation-play-state: paused;
+}
+
